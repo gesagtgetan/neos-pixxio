@@ -200,6 +200,28 @@ final class PixxioClient
     }
 
     /**
+     * @return array<string>
+     * @throws ConnectionException
+     */
+    public function getCategories(): array
+    {
+        $uri = new Uri( $this->apiEndpointUri . '/json/categories');
+        $uri = $uri->withQuery('accessToken=' . $this->accessToken);
+
+        $client = new Client();
+        try {
+            $response = $client->request('GET', $uri);
+            $decoded = \GuzzleHttp\json_decode($response->getBody());
+            if (isset($decoded->categories) && is_array($decoded->categories)) {
+                return $decoded->categories;
+            }
+            return [];
+        } catch (GuzzleException $e) {
+            throw new ConnectionException('Fetching categories failed: ' . $e->getMessage(), 1573475261);
+        }
+    }
+
+    /**
      * @return string
      */
     public function getAccessToken(): string
