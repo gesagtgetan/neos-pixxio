@@ -203,6 +203,9 @@ final class PixxioAssetProxyQuery implements AssetProxyQueryInterface
         } catch (MissingClientSecretException $exception) {
             $this->logger->logException(new ConnectionException('Connection to pixx.io failed: ' . $exception->getMessage(), 1526629547));
             return 0;
+        } catch (ConnectionException $exception) {
+            $this->logger->logException(new ConnectionException('Connection to pixx.io failed: ' . $exception->getMessage(), 1573471060));
+            return 0;
         }
     }
 
@@ -225,6 +228,9 @@ final class PixxioAssetProxyQuery implements AssetProxyQueryInterface
         } catch (MissingClientSecretException $exception) {
             $this->logger->logException(new ConnectionException('Connection to pixx.io failed: ' . $exception->getMessage(), 1526629547));
             return [];
+        } catch (ConnectionException $exception) {
+            $this->logger->logException(new ConnectionException('Connection to pixx.io failed: ' . $exception->getMessage(), 1573471039));
+            return [];
         }
         return $assetProxies;
     }
@@ -235,6 +241,7 @@ final class PixxioAssetProxyQuery implements AssetProxyQueryInterface
      * @return ResponseInterface
      * @throws AuthenticationFailedException
      * @throws MissingClientSecretException
+     * @throws ConnectionException
      */
     private function sendSearchRequest(int $limit, array $orderings): ResponseInterface
     {
