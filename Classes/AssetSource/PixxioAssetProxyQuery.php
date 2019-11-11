@@ -60,7 +60,7 @@ final class PixxioAssetProxyQuery implements AssetProxyQueryInterface
     /**
      * @var string
      */
-    private $parentFolderIdentifier = '';
+    private $category = '';
 
     /**
      * @Inject
@@ -160,17 +160,17 @@ final class PixxioAssetProxyQuery implements AssetProxyQueryInterface
     /**
      * @return string
      */
-    public function getParentFolderIdentifier(): string
+    public function getCategory(): string
     {
-        return $this->parentFolderIdentifier;
+        return $this->category;
     }
 
     /**
-     * @param string $parentFolderIdentifier
+     * @param string $category
      */
-    public function setParentFolderIdentifier(string $parentFolderIdentifier): void
+    public function setCategory(string $category): void
     {
-        $this->parentFolderIdentifier = $parentFolderIdentifier;
+        $this->category = $category;
     }
 
     /**
@@ -264,6 +264,14 @@ final class PixxioAssetProxyQuery implements AssetProxyQueryInterface
             break;
         }
 
-        return $this->assetSource->getPixxioClient()->search($searchTerm, $formatTypes, $fileTypes, $this->offset, $limit, $orderings);
+        return $this->assetSource->getPixxioClient()->search(
+            $searchTerm,
+            $formatTypes,
+            $fileTypes,
+            $this->category,
+            $this->offset,
+            $limit,
+            $orderings
+        );
     }
 }
