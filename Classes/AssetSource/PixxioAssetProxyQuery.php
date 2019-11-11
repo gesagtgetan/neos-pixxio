@@ -16,11 +16,11 @@ namespace Flownative\Pixxio\AssetSource;
 use Flownative\Pixxio\Exception\AuthenticationFailedException;
 use Flownative\Pixxio\Exception\ConnectionException;
 use Flownative\Pixxio\Exception\MissingClientSecretException;
-use GuzzleHttp\Psr7\Response;
 use Neos\Flow\Annotations\Inject;
 use Neos\Flow\Log\SystemLoggerInterface;
 use Neos\Media\Domain\Model\AssetSource\AssetProxyQueryInterface;
 use Neos\Media\Domain\Model\AssetSource\AssetProxyQueryResultInterface;
+use Psr\Http\Message\ResponseInterface;
 
 /**
  *
@@ -232,11 +232,11 @@ final class PixxioAssetProxyQuery implements AssetProxyQueryInterface
     /**
      * @param int $limit
      * @param array $orderings
-     * @return Response
+     * @return ResponseInterface
      * @throws AuthenticationFailedException
      * @throws MissingClientSecretException
      */
-    private function sendSearchRequest(int $limit, array $orderings): Response
+    private function sendSearchRequest(int $limit, array $orderings): ResponseInterface
     {
         $searchTerm = $this->searchTerm;
 
