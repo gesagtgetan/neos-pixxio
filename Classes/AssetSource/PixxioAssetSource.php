@@ -193,21 +193,34 @@ class PixxioAssetSource implements AssetSourceInterface
     public function getPixxioClient(): PixxioClient
     {
         if ($this->pixxioClient === null) {
-            $account = $this->securityContext->getAccount();
-            $clientSecret = $this->clientSecretRepository->findOneByFlowAccountIdentifier($account->getAccountIdentifier());
+            if ($this->securityContext->isInitialized()) {
+                $accountIdentifier = $this->securityContext->getAccount()->getAccountIdentifier();
+                $clientSecret = $this->clientSecretRepository->findOneByFlowAccountIdentifier($accountIdentifier);
+            } else {
+                $accountIdentifier = 'shared';
+                $clientSecret = null;
+            }
 
-            if (($clientSecret === null || $clientSecret->getRefreshToken() === '') && !empty($this->sharedRefreshToken)) {
+            $isInvalidSecret = $clientSecret === null || $clientSecret->getRefreshToken() === '';
+            if ($isInvalidSecret && !empty($this->sharedRefreshToken)) {
                 $clientSecret = new ClientSecret();
                 $clientSecret->setRefreshToken($this->sharedRefreshToken);
-                $clientSecret->setFlowAccountIdentifier('shared');
+                $clientSecret->setFlowAccountIdentifier($accountIdentifier);
             }
 
             if ($clientSecret === null || $clientSecret->getRefreshToken() === '') {
-                throw new MissingClientSecretException(sprintf('No client secret found for account %s. Please set up the pixx.io plugin with the correct credentials.', $account->getAccountIdentifier()), 1526544548);
+                throw new MissingClientSecretException(
+                    sprintf(
+                        'No client secret found for account %s. ' .
+                        'Please set up the pixx.io plugin with the correct credentials.',
+                        $accountIdentifier
+                    ),
+                    1526544548
+                );
             }
 
             $this->pixxioClient = $this->pixxioServiceFactory->createForAccount(
-                $account->getAccountIdentifier(),
+                $accountIdentifier,
                 $this->apiEndpointUri,
                 $this->apiKey
             );
