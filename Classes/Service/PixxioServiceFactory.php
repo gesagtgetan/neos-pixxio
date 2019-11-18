@@ -37,6 +37,34 @@ class PixxioServiceFactory
     protected $persistenceManager;
 
     /**
+     * @var array
+     */
+    private $fields = [
+        'id', 'originalFilename', 'fileType', 'keywords', 'createDate', 'imageHeight', 'imageWidth', 'originalPath',
+        'subject', 'description', 'modifyDate', 'fileSize', 'modifiedImagePaths', 'imagePath'
+    ];
+
+    /**
+     * @var array
+     */
+    private $imageOptions = [
+        [
+            'width' => 400,
+            'height' => 400,
+            'quality' => 90
+        ],
+        [
+            'width' => 1500,
+            'height' => 1500,
+            'quality' => 90
+        ],
+        [
+            'sizeMax' => 1920,
+            'quality' => 90
+        ]
+    ];
+
+    /**
      * Creates a new PixxioClient instance and authenticates against the Pixx.io API
      *
      * @param string $accountIdentifier
@@ -48,7 +76,9 @@ class PixxioServiceFactory
     {
         $client = new PixxioClient(
             $apiEndpointUri,
-            $apiKey
+            $apiKey,
+            $this->fields,
+            $this->imageOptions
         );
         return $client;
     }

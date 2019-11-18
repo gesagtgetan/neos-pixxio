@@ -55,37 +55,21 @@ final class PixxioClient
     /**
      * @var array
      */
-    private $fields = [
-        'id', 'originalFilename', 'fileType', 'keywords', 'createDate', 'imageHeight', 'imageWidth', 'originalPath', 'subject', 'description',
-        'modifyDate', 'fileSize', 'modifiedImagePaths', 'imagePath'
-    ];
-
+    private $fields;
 
     /**
      * @param string $apiEndpointUri
      * @param string $apiKey
+     * @param array $fields
+     * @param array $imageOptions
      */
-    public function __construct(string $apiEndpointUri, string $apiKey)
+    public function __construct(string $apiEndpointUri, string $apiKey, array $fields, array $imageOptions)
     {
         $this->apiEndpointUri = $apiEndpointUri;
         $this->apiKey = $apiKey;
+        $this->fields = $fields;
+        $this->imageOptions = $imageOptions;
         $this->guzzleClient = new Client();
-        $this->imageOptions  = [
-            (object)[
-                'width' => 400,
-                'height' => 400,
-                'quality' => 90
-            ],
-            (object)[
-                'width' => 1500,
-                'height' => 1500,
-                'quality' => 90
-            ],
-            (object)[
-                'sizeMax' => 1920,
-                'quality' => 90
-            ]
-        ];
     }
 
     /**
