@@ -170,14 +170,12 @@ final class PixxioClient
         }
 
         $uri = new Uri( $this->apiEndpointUri . '/json/files');
-        $uri = $uri->withQuery(
-            'accessToken=' . $this->accessToken . '&' .
-            'options=' . \GuzzleHttp\json_encode($options)
-        );
-
         $client = new Client();
         try {
-            return $client->request('GET', $uri);
+            return $client->request('GET', $uri, ['query' => [
+                'accessToken' => $this->accessToken,
+                'options' => \GuzzleHttp\json_encode($options)
+            ]]);
         } catch (GuzzleException $e) {
             throw new ConnectionException('Search failed: ' . $e->getMessage(), 1542808181);
         }
