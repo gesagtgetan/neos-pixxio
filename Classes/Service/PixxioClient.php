@@ -138,7 +138,7 @@ final class PixxioClient
 
         $client = new Client();
         try {
-            return $client->request('GET', $uri);
+            return $client->request('GET', (string)$uri);
         } catch (GuzzleException $e) {
             throw new ConnectionException('Retrieving file failed: ' . $e->getMessage(), 1542808207);
         }
@@ -168,7 +168,7 @@ final class PixxioClient
         try {
             return $client->request(
                 'PUT',
-                $uri,
+                (string)$uri,
                 [
                     'form_params' => [
                         'options' => \GuzzleHttp\json_encode($options)
@@ -221,7 +221,7 @@ final class PixxioClient
 
         $client = new Client();
         try {
-            return $client->request('GET', $uri);
+            return $client->request('GET', (string)$uri);
         } catch (GuzzleException $e) {
             throw new ConnectionException('Search failed: ' . $e->getMessage(), 1542808181);
         }
